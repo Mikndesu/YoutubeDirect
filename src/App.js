@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { BrowserRouter, Route } from 'react-router-dom';
 import firebase from "./auth/firebase";
 import "./App.css";
+import Youtube from "./component/youtube/youtube"
 
 class App extends Component {
   state = {
@@ -32,6 +34,7 @@ class App extends Component {
         {this.state.user ? (
           <div>
             <h2>現在ログイン中です。</h2>
+            <Youtube />
             <button onClick={this.logout}>Google Logout</button>
           </div>
         ) : (
