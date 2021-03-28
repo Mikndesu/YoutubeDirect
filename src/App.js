@@ -1,25 +1,25 @@
-import React, { Component } from 'react'
-import firebase from './firebase'
-import './App.css'
+import React, { Component } from "react";
+import firebase from "./auth/firebase";
+import "./App.css";
 
 class App extends Component {
   state = {
-    user: null
-  }
+    user: null,
+  };
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.setState({ user })
-    })
+    firebase.auth().onAuthStateChanged((user) => {
+      this.setState({ user });
+    });
   }
 
   login() {
-    const provider = new firebase.auth.GoogleAuthProvider()
-    firebase.auth().signInWithRedirect(provider)
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
   }
 
   logout() {
-    firebase.auth().signOut()
+    firebase.auth().signOut();
   }
 
   render() {
@@ -30,13 +30,16 @@ class App extends Component {
         </p>
 
         {this.state.user ? (
-          <button onClick={this.logout}>Google Logout</button>
+          <div>
+            <h2>現在ログイン中です。</h2>
+            <button onClick={this.logout}>Google Logout</button>
+          </div>
         ) : (
           <button onClick={this.login}>Google Login</button>
         )}
       </div>
-    )
+    );
   }
 }
 
-export default App
+export default App;
