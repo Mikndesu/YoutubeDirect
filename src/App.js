@@ -33,8 +33,8 @@ class App extends Component {
 
         {this.state.user ? (
           <div>
-            <h2>現在ログイン中です。</h2>
-            <Youtube />
+            <h2>You are currently logged in.</h2>
+            <Youtube apikey={process.env.REACT_APP_FIREBASE_APIKEY}/>
             <button onClick={this.logout}>Google Logout</button>
           </div>
         ) : (
