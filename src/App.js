@@ -1,10 +1,15 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route } from "react-router-dom";
 import firebase from "./auth/firebase";
 import "./App.css";
-import Youtube from "./component/youtube/youtube"
+import Youtube from "./component/youtube/youtube";
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.logout = this.logout.bind(this)
+  }
+
   state = {
     user: null,
   };
@@ -22,23 +27,26 @@ class App extends Component {
 
   logout() {
     firebase.auth().signOut();
+    this.setState({user:null})
   }
 
   render() {
     return (
       <div className="App">
-        <p className="App-intro">
-          UID: {this.state.user && this.state.user.uid}
-        </p>
-
         {this.state.user ? (
           <div>
             <h2>You are currently logged in.</h2>
-            <Youtube apikey={process.env.REACT_APP_FIREBASE_APIKEY}/>
+            <Youtube
+              apikey={process.env.REACT_APP_FIREBASE_APIKEY}
+              userID={this.state.user.uid}
+            />
             <button onClick={this.logout}>Google Logout</button>
           </div>
         ) : (
-          <button onClick={this.login}>Google Login</button>
+          <div>
+            <h2>You aren't currently logged in now.</h2>
+            <button onClick={this.login}>Google Login</button>
+          </div>
         )}
       </div>
     );

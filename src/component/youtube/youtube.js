@@ -1,4 +1,5 @@
 import React from "react";
+import Database from "../database/database";
 
 export default class Youtube extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ export default class Youtube extends React.Component {
     let params = "part=snippet&regionCode=jp&key=";
     let url = host + params + this.props.apikey + "&q=" + this.state.text;
     console.log(url);
+    let database = new Database();
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -33,6 +35,9 @@ export default class Youtube extends React.Component {
             videoIDs.push(element["id"]["videoId"]);
             this.setState({
               list: videoIDs,
+            });
+            database.write(this.props.userID, {
+              value: element["id"]["videoId"],
             });
           }
         }
@@ -57,7 +62,14 @@ export default class Youtube extends React.Component {
         <div>
           <ul>
             {this.state.list.map((element) => {
-              return <li><iframe src={'https://www.youtube.com/embed/'+element} title={element}/></li>;
+              return (
+                <li key={element}>
+                  <iframe
+                    src={"https://www.youtube.com/embed/" + element}
+                    title={element}
+                  />
+                </li>
+              );
             })}
           </ul>
         </div>
