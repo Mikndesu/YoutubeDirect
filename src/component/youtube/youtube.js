@@ -1,6 +1,22 @@
 import React from "react";
 import Database from "../database/database";
 
+class YoutubeFrame extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <li key={this.props.id}>
+        <iframe
+          src={"https://www.youtube.com/embed/" + this.props.id}
+          title={this.props.id}
+        />
+      </li>
+    );
+  }
+}
+
 export default class Youtube extends React.Component {
   constructor(props) {
     super(props);
@@ -63,12 +79,7 @@ export default class Youtube extends React.Component {
           <ul>
             {this.state.list.map((element) => {
               return (
-                <li key={element}>
-                  <iframe
-                    src={"https://www.youtube.com/embed/" + element}
-                    title={element}
-                  />
-                </li>
+                <YoutubeFrame id={element}/>
               );
             })}
           </ul>
