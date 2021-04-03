@@ -21,11 +21,13 @@ export default class Youtube extends React.Component {
   constructor(props) {
     super(props);
     this.get_youtube_raw_url = this.get_youtube_raw_url.bind(this);
+    this.requestYoutubeAPI = this.requestYoutubeAPI.bind(this)
   }
 
   state = {
     text: "",
     list: [],
+    list_raw_url: []
   };
 
   style = {
@@ -36,7 +38,7 @@ export default class Youtube extends React.Component {
     borderRadius: "0.5em",
   };
 
-  get_youtube_raw_url() {
+  requestYoutubeAPI() {
     let host = "https://www.googleapis.com/youtube/v3/search?";
     let params = "part=snippet&regionCode=jp&key=";
     let url = host + params + this.props.apikey + "&q=" + this.state.text;
@@ -55,8 +57,25 @@ export default class Youtube extends React.Component {
             database.write(this.props.userID, {
               value: element["id"]["videoId"],
             });
+            this.get_youtube_raw_url(element["id"]["videoId"])
           }
         }
+      });
+    this.state.list_raw_url.forEach(element => {
+      console.log(element)
+    })
+  }
+
+  get_youtube_raw_url(videoId) {
+    fetch("/get_movie_raw_url/"+videoId)
+      .then((response) => response.json())
+      .then((data) => {
+        let raw_urls = [...this.state.list_raw_url]
+        raw_urls.push(data)
+        this.setState({
+          list_raw_url: raw_urls
+        })
+        console.log(data)
       });
   }
 
@@ -73,7 +92,7 @@ export default class Youtube extends React.Component {
           type="submit"
           id="submitButton"
           style={this.style}
-          onClick={this.get_youtube_raw_url}
+          onClick={this.requestYoutubeAPI}
         ></button>
         <div>
           <ul>
